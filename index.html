@@ -92,18 +92,34 @@
     </div>
 </body>
 <script>  
-    var cell = []
+      
     var n = 1;
+    var cell = []
     var data = new Object();
-
     var lastIndex = 0; 
-
-    if(sessionStorage.getItem('lastIndex') != null || sessionStorage.getItem('lastIndex') =="") {
-        lastIndex = sessionStorage.getItem('lastIndex')
+    if(localStorage.getItem('lastIndex') != null || localStorage.getItem('lastIndex') =="") {
+        lastIndex = localStorage.getItem('lastIndex')
     }
-    
+    window.onload = function() {
+        var localObj = JSON.parse(localStorage.getItem('object'));
+        var cell = []
+        
+        for(let objs in localObj) {
+            var i = 0;
+            var addRow = document.getElementById('show');
+            var newRow = addRow.insertRow(n);
+           for(let obj in localObj[objs]) {
+                cell[i] = newRow.insertCell(i);
+                cell[i].innerHTML = localObj[objs][obj];
+                i++;
+            }
+            n++;
+        }
+
+    }
     function addRow(){
-        sessionStorage.setItem('lastIndex', ++lastIndex);
+        localStorage.setItem('lastIndex', ++lastIndex);
+
         var addRow = document.getElementById('show');
         var newRow = addRow.insertRow(n);
         var object = new Object();
@@ -112,6 +128,8 @@
 
         for(var i=0; i<=5 ; i++) {
             cell[i] = newRow.insertCell(i);
+            
+
         }
 
 
@@ -119,8 +137,8 @@
 
             // For getting Gender Value
             if(elements[i].value == "Male" && elements[i].checked) {
-                cell[count].innerHTML = elements[i++].value;
-                object[count] = elements[i].value;
+                cell[count].innerHTML = elements[i].value;
+                object[count] = elements[i++].value;
                 continue;
             } else if (elements[i+1].value == "Female" && elements[i+1].checked){
                 cell[count].innerHTML = elements[++i].value;
@@ -136,7 +154,7 @@
                 continue;
             } else if(elements[i].value == "cookie"){
                 cell[count].innerHTML = "No";
-                object[lastIndex][count] = "No";
+                object[count] = "No";
                 i++;
                 continue;
             }
@@ -153,8 +171,14 @@
             ... 
             object
         }
+        Obj = JSON.parse(localStorage.getItem('object'));
+        
+        if(Obj !== undefined) {
+            data  = Object.assign(data, Obj);
+        }
 
-        console.log(data);
+        localStorage.setItem('object', JSON.stringify(data));
+
         n++;   
         event.preventDefault();
     }
