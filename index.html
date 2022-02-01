@@ -75,8 +75,10 @@
                     
                 </div>
             </div>
+            <div>
+                <button class="btn btn-danger" onclick="removeStorage()">Delete localStorage</button>
+            </div>
             <table class="table table-striped" id="show">
-                <thead class="thead-light">
                     <tr>
                         <th>Name</th>
                         <th>Email</th>
@@ -84,8 +86,8 @@
                         <th>City</th>
                         <th>Password</th>
                         <th>Accept Cookie</th>
-                    </thead>
-                </tr>
+                    </tr>
+                
 
             </table>
         </div>
@@ -100,6 +102,18 @@
     if(localStorage.getItem('lastIndex') != null || localStorage.getItem('lastIndex') =="") {
         lastIndex = localStorage.getItem('lastIndex')
     }
+
+    function removeStorage() {
+        localStorage.removeItem('lastIndex');
+        localStorage.removeItem('object');
+        var rowCount = show.rows.length;
+        for (var i = rowCount - 1; i > 0; i--) {
+            
+            show.deleteRow(i);
+        }
+        n = 1;
+    }
+
     window.onload = function() {
         var localObj = JSON.parse(localStorage.getItem('object'));
         var cell = []
