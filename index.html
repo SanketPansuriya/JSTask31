@@ -1,0 +1,164 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width = device-width, initial-scale = 1, shrink-to-fit = no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>Registration Form</title>
+    <style>
+        form input option {
+            font-weight: 500;
+        }
+
+        label {
+            height: 1%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h1 class="text-center ">Data Adding Form</h1>
+                <div class="card bg-warning my-5">
+                    <form action="" class="form p-4 p-md-5" name="form">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="name"  aria-describedby="Name"
+                                placeholder="Enter your Name">
+                            <label for="name">Name</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="email"  aria-describedby="Email"
+                                placeholder="Enter your email">
+                            <label for="email">Email</label>
+                        </div>
+                        <div class="form-check mb-3 d-flex align-item-center">
+                            <div class="">
+                                <input class="form-check-input" type="radio" name="gender" id="male" value="Male"  checked>
+                                <label class="form-check-label" for="male">
+                                    Male
+                                </label>
+                            </div>
+                            <div class="ms-auto me-auto">
+                                <input class="form-check-input" type="radio" name="gender" value="Female"  id="female">
+                                <label class="form-check-label" for="female">
+                                    Female
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <select class="form-select p-2" id="city"  aria-label="Floating label select example" required>
+                                <option selected disabled value="0">Select City</option>
+                                <option value="city1">City1</option>
+                                <option value="city2">City2</option>
+                                <option value="city3">City3</option>
+                            </select>
+
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control"  id="password" aria-describedby="password"
+                                placeholder="Enter your password">
+                            <label for="password">Password</label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" value="cookie" id="storage"
+                                aria-describedby="invalidCheck3Feedback" required>
+                            <label class="form-check-label" for="store">
+                                Accept the Local, Session and Cookie storage ?
+                            </label>
+                        </div>
+                        <button type="submit" id="submitBtn" class="btn btn-primary" onclick="addRow()">Add Data</button>
+                    </form> 
+
+                    
+                </div>
+            </div>
+            <table class="table table-striped" id="show">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Gender</th>
+                        <th>City</th>
+                        <th>Password</th>
+                        <th>Accept Cookie</th>
+                    </thead>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+</body>
+<script>  
+    var cell = []
+    var n = 1;
+    var data = new Object();
+
+    var lastIndex = 0; 
+
+    if(sessionStorage.getItem('lastIndex') != null || sessionStorage.getItem('lastIndex') =="") {
+        lastIndex = sessionStorage.getItem('lastIndex')
+    }
+    
+    function addRow(){
+        sessionStorage.setItem('lastIndex', ++lastIndex);
+        var addRow = document.getElementById('show');
+        var newRow = addRow.insertRow(n);
+        var object = new Object();
+        var elements = document.forms['form'].elements;
+        var count = 0;
+
+        for(var i=0; i<=5 ; i++) {
+            cell[i] = newRow.insertCell(i);
+        }
+
+
+        for (i=0; i<elements.length && count < 6; i++,count++){ 
+
+            // For getting Gender Value
+            if(elements[i].value == "Male" && elements[i].checked) {
+                cell[count].innerHTML = elements[i++].value;
+                object[count] = elements[i].value;
+                continue;
+            } else if (elements[i+1].value == "Female" && elements[i+1].checked){
+                cell[count].innerHTML = elements[++i].value;
+                object[count] = elements[i].value;
+                continue;
+            }
+
+            // Check the Accept cookie is checked or not
+            if(elements[i].value == "cookie" && elements[i].checked) {
+                cell[count].innerHTML = "Yes";
+                object[count] = "Yes";
+                i++;
+                continue;
+            } else if(elements[i].value == "cookie"){
+                cell[count].innerHTML = "No";
+                object[lastIndex][count] = "No";
+                i++;
+                continue;
+            }
+
+            object[count] =elements[i].value;
+            cell[count].innerHTML = elements[i].value;
+            console.log(elements[i].value);
+        }
+
+        // Set object into local storage
+        console.log(object);
+        
+        data[lastIndex] = {
+            ... 
+            object
+        }
+
+        console.log(data);
+        n++;   
+        event.preventDefault();
+    }
+
+</script>
+
+</html>
